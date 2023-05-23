@@ -1,0 +1,7 @@
+[0m[[0m[31merror[0m] [0m[0m/Users/hugobarbosa/Desktop/td1_maths/src/test/scala/MainSpec.scala:93:18: not found: value abs[0m
+[0m[[0m[31merror[0m] [0m[0m    val result = abs(x)[0m
+[0m[[0m[31merror[0m] [0m[0m                 ^[0m
+[0m[[0m[31merror[0m] [0m[0m/Users/hugobarbosa/Desktop/td1_maths/src/test/scala/MainSpec.scala:100:18: not found: value abs[0m
+[0m[[0m[31merror[0m] [0m[0m    val result = abs(x)[0m
+[0m[[0m[31merror[0m] [0m[0m                 ^[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m
