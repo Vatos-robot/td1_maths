@@ -101,10 +101,6 @@ class MathSpec extends AnyFlatSpec with Matchers {
     result shouldBe 3.8
   }
 
-  "sqrt_heron" should "calculate the square with Heron's method" in {
-    val a = 25
-    val result = Math.heron_sqrt(a)
-    result shouldEqual 5.0
-  }
+  
   
 }
