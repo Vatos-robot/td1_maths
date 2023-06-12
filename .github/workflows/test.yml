@@ -1,0 +1,31 @@
+name: Docker CI
+
+on:
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: docker/setup-docker@v1
+
+      - name: Run hadolint
+        run: docker run --rm -i hadolint/hadolint < Dockerfile
+
+      - name: Build Docker image
+        run: docker build -t your-docker-image-name:${{ github.sha }} .
+
+      - name: Start and test container
+        run: |
+          docker run -d --name my-container your-docker-image-name:${{ github.sha }}
+          docker exec my-container sbt test
+          docker stop my-container
+
+
