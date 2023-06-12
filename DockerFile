@@ -1,4 +1,4 @@
-# Utilisez une image de base contenant Java 8
+# Utilisez une image de base contenant Java 8 et sbt installé
 FROM openjdk:8-jdk-alpine
 
 # Définir le répertoire de travail dans l'image
@@ -9,10 +9,11 @@ COPY build.sbt .
 COPY src ./src
 
 # Exécutez sbt pour télécharger et installer les dépendances
-RUN sbt update
+RUN apk update && apk add --no-cache curl bash && \
+    curl -Ls https://git.io/sbt > sbt && \
+    chmod +x sbt && \
+    ./sbt update
 
-# Compilez le projet
-RUN sbt compile
+# Exécutez les tests
+CMD ./sbt test
 
-# Exécutez les tests (facultatif)
-RUN sbt test
