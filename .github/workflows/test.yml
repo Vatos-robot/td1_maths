@@ -20,7 +20,7 @@ jobs:
         run: docker run --rm -i hadolint/hadolint < DockerFile
 
       - name: Build Docker image
-        run: docker build -t test-sbt${{ github.sha }} .
+        run: docker build -t test-sbt:latest .
 
       - name: Start and test container
         run: |
