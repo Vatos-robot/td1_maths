@@ -14,17 +14,17 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Docker
-        uses: docker/setup-docker@v1
+        uses: docker/setup-buildx-action@v1
 
       - name: Run hadolint
         run: docker run --rm -i hadolint/hadolint < Dockerfile
 
       - name: Build Docker image
-        run: docker build -t your-docker-image-name:${{ github.sha }} .
+        run: docker build -t test-sbt${{ github.sha }} .
 
       - name: Start and test container
         run: |
-          docker run -d --name my-container your-docker-image-name:${{ github.sha }}
+          docker run -d --name my-container test-sbt:${{ github.sha }}
           docker exec my-container sbt test
           docker stop my-container
 
