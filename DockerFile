@@ -1,0 +1,18 @@
+# Utilisez une image de base contenant Java 8
+FROM openjdk:8-jdk-alpine
+
+# Définir le répertoire de travail dans l'image
+WORKDIR /app
+
+# Copiez le fichier build.sbt et les sources dans le conteneur
+COPY build.sbt .
+COPY src ./src
+
+# Exécutez sbt pour télécharger et installer les dépendances
+RUN sbt update
+
+# Compilez le projet
+RUN sbt compile
+
+# Exécutez les tests (facultatif)
+RUN sbt test
