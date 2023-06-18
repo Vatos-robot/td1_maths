@@ -1,4 +1,4 @@
-name: Docker CI/CD
+name: Docker CD
 
 on:
   pull_request:
@@ -48,7 +48,18 @@ jobs:
       - name: Log in to Docker registry
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Tag and push Docker image
+      - name: Tag and push Docker image with Git tag
         run: |
-          docker tag test-sbt:latest your-docker-registry/your-repository:main
-          docker push your-docker-registry/your-repository:main
+          docker tag test-sbt:latest your-docker-registry/your-repository:${{ github.sha }}
+          docker push your-docker-registry/your-repository:${{ github.sha }}
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            path/to/release/file
+          tag_name: ${{ github.sha }}
+          release_name: Release ${{ github.sha }}
+          body: Release ${{ github.sha }}
+          draft: false
+          prerelease: false
