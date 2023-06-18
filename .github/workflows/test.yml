@@ -1,9 +1,14 @@
-name: Docker CI
+name: Docker CD
 
 on:
   pull_request:
     branches:
       - '*'
+  push:
+    branches:
+      - main
+    schedule:
+      - cron: '0 0 * * *'
 
 jobs:
   build-and-test:
@@ -17,10 +22,10 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Run hadolint
-        run: docker run --rm -i hadolint/hadolint < DockerFile
+        run: docker run --rm -i hadolint/hadolint < ${{ github.workspace }}/Dockerfile
 
       - name: Build Docker image
-        run: docker build -t test-sbt${{ github.sha }} .
+        run: docker build -t test-sbt:latest .
 
       - name: Start and test container
         run: |
@@ -28,4 +33,33 @@ jobs:
           docker exec my-container sbt test
           docker stop my-container
 
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: ${{ needs.build-and-test.result == 'success' }}
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker registry
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Tag and push Docker image with Git tag
+        run: |
+          docker tag test-sbt:latest your-docker-registry/your-repository:${{ github.sha }}
+          docker push your-docker-registry/your-repository:${{ github.sha }}
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            path/to/release/file
+          tag_name: ${{ github.sha }}
+          release_name: Release ${{ github.sha }}
+          body: Release ${{ github.sha }}
+          draft: false
+          prerelease: false
