@@ -25,7 +25,7 @@ jobs:
         run: docker run --rm -i hadolint/hadolint < ${{ github.workspace }}/DockerFile
 
       - name: Build Docker image
-        run: docker build -t test-sbt:latest ${{ github.workspace }}
+        run: docker build -t test-sbt:latest ${{ github.workspace }}/DockerFile
 
       - name: Start and test container
         run: |
