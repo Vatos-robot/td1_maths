@@ -29,7 +29,7 @@ jobs:
 
       - name: Start and test container
         run: |
-          docker run -d --name my-container test-sbt:${{ github.workspace }}
+          docker run -d --name my-container test-sbt:${{ github.sha }}
           docker exec my-container sbt test
           docker stop my-container
 
