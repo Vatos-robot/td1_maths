@@ -22,10 +22,10 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Run hadolint
-        run: docker run --rm -i hadolint/hadolint < ${{ github.workspace }}/DockerFile
+        run: docker run --rm -i hadolint/hadolint < ${{ github.workspace }}/Dockerfile
 
       - name: Build Docker image
-        run: docker build -t test-sbt:latest ${{ github.workspace }}/DockerFile
+        run: docker build -t test-sbt:latest ${{ github.workspace }}
 
       - name: Start and test container
         run: |
